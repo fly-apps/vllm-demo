@@ -1,25 +1,51 @@
-app = "vllm-demo"
-primary_region = "ord"
+app = 'deepseek-v3'
+primary_region = 'ord'
 
-[experimental]
-entrypoint = "/start.sh"
+[processes]
+head = "head"
+app = "worker"
+oapi = "oapi"
 
-[build]
-image = "vllm/vllm-openai:v0.4.2"
+[env]
+MODEL = 'deepseek-ai/DeepSeek-V3'
 
 [[mounts]]
-source = "models"
-destination = "/root/.cache/huggingface"
+source = 'models'
+destination = '/data'
+initial_size = '800gb'
+processes = ["app", "oapi"]
+
+[[mounts]]
+source = 'ray'
+destination = '/data'
+initial_size = '10gb'
+processes = ["head"]
 
 [http_service]
 internal_port = 8000
 force_https = true
+processes = ["oapi"]
+
+[[services]]
+internal_port = 8265
+protocol = "tcp"
+processes = ["head"]
+
+[[services.ports]]
+port = 8265
+handlers = ["http", "tls"]
 
 [[vm]]
-size = 'l40s'
-gpus = 1
+size = 'a100-80gb'
+memory = '416gb'
+cpus = 16
+gpus = 8
+processes = ["app", "oapi"]
 
-[[files]]
-guest_path = "/start.sh"
-local_path = "start.sh"
+[[vm]]
+size = 'a100-40gb'
+processes = ["head"]
 
+[[metrics]]
+port = 9091
+path = '/'
