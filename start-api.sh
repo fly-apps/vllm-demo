@@ -1,9 +1,12 @@
 #!/bin/bash
+ulimit -n 102400
 
 . /app/env.sh
 
-export RAY_ADDRESS=ray://$HEAD_FQDN:10001
-export VLLM_USE_RAY_SPMD_WORKER=1 VLLM_USE_RAY_COMPILED_DAG=1
+export VLLM_HOST_IP=$NODE_FQDN
+
+#export RAY_ADDRESS=ray://$HEAD_FQDN:10001
+#export VLLM_USE_RAY_SPMD_WORKER=1 VLLM_USE_RAY_COMPILED_DAG=1
 
 [[ $MODEL ]] || exit 1
 

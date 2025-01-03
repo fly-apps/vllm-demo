@@ -8,6 +8,7 @@ oapi = "oapi"
 
 [env]
 MODEL = 'deepseek-ai/DeepSeek-V3'
+#MODEL = 'inarikami/DeepSeek-V3-int4-TensorRT'
 
 [[mounts]]
 source = 'models'
