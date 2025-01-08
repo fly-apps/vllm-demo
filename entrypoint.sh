@@ -9,8 +9,6 @@ bindmount() {
 }
 bindmount /root/.cache/huggingface
 
-sed -i -e '/Waiting for output/d' /usr/local/lib/python3.12/dist-packages/vllm/engine/multiprocessing/client.py
-
 /app/start-api.sh &
 
 exec sleep inf
